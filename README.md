@@ -13,6 +13,8 @@
 
 ## d1
 
+![Results](media/pull_fig.pdf)
+
 ### SFT
 
 We open-source our code to perform completion-only masked SFT for dLLMs. We implement the algorithm proposed in [LLaDA](https://github.com/ML-GSAI/LLaDA), and also provide it below for completeness.
