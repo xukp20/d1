@@ -9,7 +9,7 @@ import torch.distributed as dist
 class dLLMTrainer(Trainer):
     def compute_loss(self, model, inputs, num_items_in_batch=None, return_outputs=False):
         """
-        Custom loss computation.
+        Absorbing state diffusion loss computation
         """
         labels, t, num_prompt_tokens = inputs.pop("labels"), inputs.pop("t"), inputs.pop("num_prompt_tokens")
         outputs = model(**inputs)
@@ -22,6 +22,9 @@ class dLLMTrainer(Trainer):
         return loss if not return_outputs else (loss, outputs)
 
 class dLLMSFTDataset(torch.utils.data.Dataset):
+    '''
+        Similar to AR datasets, except in inference, we keep the timsteps fixed
+    '''
     def __init__(self, data, tokenizer, max_length, eval=False):
         super().__init__()
         self.data = data
@@ -41,6 +44,10 @@ class dLLMSFTDataset(torch.utils.data.Dataset):
         return out
 
 class dLLMDataCollator(DefaultDataCollator):
+    '''
+        Adds the forward noising process to the batch. 
+        Modify forward_process to change the noise schedule
+    '''
     def __init__(self, *args, **kwargs):
         super().__init__()
         self.mask_token_id = kwargs['tokenizer'].mask_token_id

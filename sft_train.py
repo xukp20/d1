@@ -63,7 +63,7 @@ def load_model_and_tokenizer(args):
 
     # Applying LoRA model
     model = get_peft_model(model, lora_config)
-    model = model.to(torch.bfloat16)
+    model = model.to(torch.bfloat16) # Cast fp32 lora params to bf16
     
     return tokenizer, model
 
@@ -97,8 +97,8 @@ def train_model(args, tokenizer, model):
         load_best_model_at_end=True,
         weight_decay=0.1,
         max_grad_norm=1.0,
-        bf16=True,  # Mixed precision flag
-        report_to="wandb" if not args.debugging else "none",  # WandB logging
+        bf16=True,
+        report_to="wandb" if not args.debugging else "none",
         remove_unused_columns=False,
     )
 

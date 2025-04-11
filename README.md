@@ -19,7 +19,7 @@ We open-source our code to perform completion-only masked SFT for dLLMs. We impl
 
 ![SFT Algorithm](media/algorithm_sft.png)
 
-The API is similar to 🤗 Transformers; in place of `Trainer` we use `dLLMTrainer`, and in place of `DefaultDataCollator` we use `dLLMDataCollator`. Additionally, we provide a torch dataset, `dLLMSFTDataset`.
+The API is similar to 🤗 Transformers; `dLLMTrainer` inherits from `Trainer` and modifies the loss function, and `dLLMDataCollator` inherits from `DefaultDataCollator` which applies the forward noising process to the batch. Additionally, we provide a torch dataset, `dLLMSFTDataset`.
 
 To preprocess and tokenize your dataset, you will need to modify `preprocess_dataset`. Presently, it works with the s1K dataset.
 
