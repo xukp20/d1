@@ -1,18 +1,27 @@
 <div  align="center">
     <h1>d1: Scaling Reasoning in Diffusion Large Language Models via Reinforcement Learning</h1>
-        <p>A two-stage recipe with SFT followed by a novel variant of GRPO, <i>diffu</i>-GRPO, to convert pre-trained dLLMs into strong reasoning models.</p>
+  <p>A two-stage approach combining masked SFT with <i>diffu</i>-GRPO—a novel policy gradient method based on GRPO that features efficient log probability estimation designed for masked dLLMs—to scale reasoning capabilities in pre-trained diffusion Large Language Models</p>
 </div>
-****************************************************************
+
+
+
+![Results](media/pull_fig.png)
+
+![Results](media/sota.png)
+
+<div align="center">
+  <hr width="100%">
+</div>
 
 **Updates:**
 
 * 04-11-2025: We released [our paper](https://dllm-reasoning.github.io/media/preprint.pdf) and [project page](https://dllm-reasoning.github.io). Additionally, the SFT code was open-sourced.
 
-****************************************************************
+<div align="center">
+  <hr width="100%">
+</div>
 
-## d1
 
-![Results](media/pull_fig.png)
 
 ### SFT
 
