@@ -35,12 +35,3 @@ Code coming soon!
 ### Eval
 Code coming soon!
 
-## Citation
-```
-@inproceedings {zhaoandgupta2023d1,
-    title={d1: Scaling Reasoning in Diffusion Large Language Models via Test-Time Inference},
-    author={Zhao, Siyan and Gupta, Devaansh and Zheng, Qinqing and Grover, Aditya},
-    booktitle={preprint},
-    year={2025}
-}
-```
