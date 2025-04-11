@@ -13,7 +13,7 @@
 
 ## d1
 
-![Results](media/pull_fig.pdf)
+![Results](media/pull_fig.png)
 
 ### SFT
 
