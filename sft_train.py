@@ -9,7 +9,6 @@ from sft_trainer import *
 import torch.distributed as dist
 import random
 import numpy as np
-import bitsandbytes as bnb
 
 def init_seed(seed):
     random.seed(seed)
@@ -32,7 +31,7 @@ def parse_args():
     parser.add_argument('--grad_accum_steps', type=int, default=4, help='Gradient accumulation steps')
     parser.add_argument('--output_dir', type=str, default='/data0/devaansh', help='Directory to save model checkpoints and logs')
     parser.add_argument('--job_name', type=str, default='llada-s1', help='Job Name')
-    parser.add_argument('--train_data', type=str, default='simplecaling/s1K', help='Path to training data')
+    parser.add_argument('--train_data', type=str, default='simplescaling/s1K', help='Path to training data')
     parser.add_argument('--hf_cache_dir', type=str, default='/data0/shared', help='Cache directory for dataset and model')
     parser.add_argument('--debugging', action='store_true', help='Use while debugging model - only disables wandb logging')
 

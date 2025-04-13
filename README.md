@@ -23,6 +23,13 @@
 
 
 
+### Environment Setup
+
+To setup the environment, run;
+```
+conda env create -f env.yml
+```
+
 ### SFT
 
 We open-source our code to perform completion-only masked SFT for dLLMs. We implement the algorithm proposed in [LLaDA](https://github.com/ML-GSAI/LLaDA), and also provide it below for completeness.
