@@ -51,3 +51,18 @@ Code coming soon!
 ### Eval
 Code coming soon!
 
+
+### Citation
+
+```bibtex
+@misc{zhao2025d1scalingreasoningdiffusion,
+      title={d1: Scaling Reasoning in Diffusion Large Language Models via Reinforcement Learning}, 
+      author={Siyan Zhao and Devaansh Gupta and Qinqing Zheng and Aditya Grover},
+      year={2025},
+      eprint={2504.12216},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2504.12216}, 
+}
+```
+
