@@ -85,14 +85,11 @@ The evaluation code is inside the `eval` directory.
 If you find this work useful, please consider citing:
 
 ```bibtex
-@misc{zhao2025d1scalingreasoningdiffusion,
-      title={d1: Scaling Reasoning in Diffusion Large Language Models via Reinforcement Learning}, 
-      author={Siyan Zhao and Devaansh Gupta and Qinqing Zheng and Aditya Grover},
-      year={2025},
-      eprint={2504.12216},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2504.12216}, 
+@article{zhao2025d1,
+  title={d1: Scaling reasoning in diffusion large language models via reinforcement learning},
+  author={Zhao, Siyan and Gupta, Devaansh and Zheng, Qinqing and Grover, Aditya},
+  journal={arXiv preprint arXiv:2504.12216},
+  year={2025}
 }
 ```
 
