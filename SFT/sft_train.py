@@ -1,11 +1,10 @@
 import torch
 import argparse
 from transformers import AutoTokenizer, AutoModel, TrainingArguments
-from datasets import load_dataset
-from torch.utils.data import DataLoader
 from peft import LoraConfig, get_peft_model, TaskType
 import os
 from sft_trainer import *
+from dataset_loader import load_data, get_available_datasets
 import torch.distributed as dist
 import random
 import numpy as np
@@ -43,9 +42,27 @@ def parse_args():
         help="Directory to save model checkpoints and logs",
     )
     parser.add_argument("--job_name", type=str, default="llada-s1", help="Job Name")
-    parser.add_argument("--train_data", type=str, default="simplescaling/s1K", help="Path to training data")
+    parser.add_argument(
+        "--train_data", 
+        type=str, 
+        default="simplescaling/s1K", 
+        choices=get_available_datasets(),
+        help=f"Dataset to use for training. Available choices: {get_available_datasets()}"
+    )
     parser.add_argument(
         "--debugging", action="store_true", help="Use while debugging model - only disables wandb logging"
+    )
+    parser.add_argument(
+        "--max_train_samples", 
+        type=int, 
+        default=None, 
+        help="Maximum number of training samples to use. If None, use all available samples."
+    )
+    parser.add_argument(
+        "--use_fast_preprocessing", 
+        action="store_true", 
+        default=True,
+        help="Use fast parallel preprocessing (default: True)"
     )
 
     return parser.parse_args()
@@ -82,15 +99,7 @@ def load_model_and_tokenizer(args):
     return tokenizer, model
 
 
-# Dataset loading
-def load_data(args, tokenizer):
-    data = load_dataset(args.train_data, split="train")
-    train_data, eval_data = preprocess_dataset(data, tokenizer, args.max_length)
-    print("Train data length: ", len(train_data))
-    print("Eval data length: ", len(eval_data))
-    train_dataset = dLLMSFTDataset(train_data, tokenizer, args.max_length)
-    eval_dataset = dLLMSFTDataset(eval_data, tokenizer, args.max_length, eval=True)
-    return train_dataset, eval_dataset
+# Dataset loading is now handled in dataset_loader.py
 
 
 # Training setup
@@ -98,9 +107,11 @@ def train_model(args, tokenizer, model):
     # Load dataset
     train_dataset, eval_dataset = load_data(args, tokenizer)
 
+    name = args.job_name + "_" + args.train_data.split("/")[-1] + "_" + datetime.now().strftime("%Y%m%d_%H%M%S")
+
     # Training arguments setup
     training_args = TrainingArguments(
-        output_dir=os.path.join(args.output_dir, args.job_name),
+        output_dir=os.path.join(args.output_dir, name),
         num_train_epochs=args.num_epochs,
         per_device_train_batch_size=args.batch_size,
         gradient_accumulation_steps=args.grad_accum_steps,
@@ -116,7 +127,7 @@ def train_model(args, tokenizer, model):
         bf16=True,
         # report_to="wandb" if not args.debugging else "none",
         report_to="swanlab" if not args.debugging else "none",
-        run_name=args.job_name + "_" + args.train_data.split("/")[-1] + "_" + datetime.now().strftime("%Y%m%d_%H%M%S"),
+        run_name=name,
         remove_unused_columns=False,
     )
 
