@@ -1,5 +1,17 @@
 #!/bin/bash
 
+model_path="GSAI-ML/LLaDA-8B-Instruct"
+checkpoint_path="/cephfs/xukangping/code/d1/SFT/outputs/llada-s1/checkpoint-320"
+name="llada-s1-sft"
+
+# Take out the basename as the output dir
+# If has name, use the name, or else use the model basename
+if [ -n "$name" ]; then
+  output_dir=./eval_results/$name
+else
+  output_dir=./eval_results/$(basename $model_path)
+fi
+
 # Configuration variables
 GPU_IDS=(0 1 2 3 4 5 6 7)
 
@@ -33,15 +45,24 @@ for task in "${TASKS[@]}"; do
     
     echo "Running evaluation on $task with gen_length=$gen_length, batch_size=$batch_size"
     
-    CUDA_VISIBLE_DEVICES=$GPU_LIST torchrun \
+    command="CUDA_VISIBLE_DEVICES=$GPU_LIST torchrun \
       --nproc_per_node $NUM_GPUS \
       --master_port $MASTER_PORT \
       eval.py \
       --dataset $task \
       --batch_size $batch_size \
       --gen_length $gen_length \
-      --output_dir "eval_results" \
-      --model_path "/data0/shared/LLaDA-8B-Instruct/"
+      --output_dir $output_dir \
+      --model_path $model_path
+    "
+
+    # If given checkpoint_path, add it to the command
+    if [ -n "$checkpoint_path" ]; then
+      command="$command --checkpoint_path $checkpoint_path"
+    fi
+
+    echo $command
+    eval $command
   done
 done
 

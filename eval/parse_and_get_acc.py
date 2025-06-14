@@ -438,4 +438,9 @@ def aggregate_results(directory="."):
 
 
 if __name__ == "__main__":
-    aggregate_results(directory="eval_baselines")
+    # load the dir from argparse
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--dir", type=str, required=True)
+    args = parser.parse_args()
+    aggregate_results(directory=args.dir)
