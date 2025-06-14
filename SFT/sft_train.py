@@ -9,6 +9,7 @@ from sft_trainer import *
 import torch.distributed as dist
 import random
 import numpy as np
+from datetime import datetime
 
 
 def init_seed(seed):
@@ -38,7 +39,7 @@ def parse_args():
     parser.add_argument(
         "--output_dir",
         type=str,
-        default="/data0/devaansh",
+        default="./outputs",
         help="Directory to save model checkpoints and logs",
     )
     parser.add_argument("--job_name", type=str, default="llada-s1", help="Job Name")
@@ -103,8 +104,8 @@ def train_model(args, tokenizer, model):
         num_train_epochs=args.num_epochs,
         per_device_train_batch_size=args.batch_size,
         gradient_accumulation_steps=args.grad_accum_steps,
-        evaluation_strategy="steps",
-        eval_steps=100,
+        eval_strategy="steps",
+        eval_steps=50,
         logging_steps=2,
         save_steps=100,
         save_total_limit=20,
@@ -113,7 +114,9 @@ def train_model(args, tokenizer, model):
         weight_decay=0.1,
         max_grad_norm=1.0,
         bf16=True,
-        report_to="wandb" if not args.debugging else "none",
+        # report_to="wandb" if not args.debugging else "none",
+        report_to="swanlab" if not args.debugging else "none",
+        run_name=args.job_name + "_" + args.train_data.split("/")[-1] + "_" + datetime.now().strftime("%Y%m%d_%H%M%S"),
         remove_unused_columns=False,
     )
 

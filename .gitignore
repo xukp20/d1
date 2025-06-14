@@ -1,0 +1,10 @@
+**/__pycache__/
+**/wandb/
+**/logs/
+**/data/
+**/models/
+**/results/
+**/checkpoints/
+**/results/
+**/outputs/
+**/swanlog/

@@ -110,6 +110,7 @@ Your reasoning here
 </answer>
 """
 
+eot_token = "<|eot_id|>"
 
 def preprocess_dataset(data, tokenizer, max_length, test_split=0.01):
     preprocessed_data = []
@@ -118,8 +119,14 @@ def preprocess_dataset(data, tokenizer, max_length, test_split=0.01):
         trajectory = f"<reasoning>{data[i]['thinking_trajectories'][0]}</reasoning>\n<answer>{data[i]['attempt']}</answer>"
         prompt = [{"role": "user", "content": question}]
         response = [{"role": "assistant", "content": trajectory}]
-        inputs = tokenizer.apply_chat_template(prompt + response, tokenize=False)
-        prompt = tokenizer.apply_chat_template(prompt, tokenize=False) + "\n"
+        inputs = tokenizer.apply_chat_template(prompt + response, tokenize=False, add_generation_prompt=False)
+        prompt = tokenizer.apply_chat_template(prompt, tokenize=False)
+
+        # Remove the part after the final eot_token
+        if eot_token in inputs:
+            last_eot_index = inputs.rfind(eot_token)
+            inputs = inputs[:last_eot_index + len(eot_token)]
+
         tokenized_input = tokenizer(
             inputs, return_tensors="pt", truncation=True, max_length=max_length, padding="max_length"
         ).input_ids.squeeze(0)
